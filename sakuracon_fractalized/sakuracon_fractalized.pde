@@ -9,7 +9,7 @@ float initSize;
 float sparse;
 float scale;
 int counter;
-float shadowSize = 400.0; 
+float shadowSize = 200.0; 
 float shadowRatio = 1402.0/976.0;
 
 PImage doller;
@@ -49,8 +49,8 @@ void draw() {
   if(counter<width) scale += 0.1/float(width);
   if(counter>width && counter<width+height) sparse += 0.5/float(height);
   // image(doller, mouseX, mouseY);
-  drawDoll(mouseX, mouseY, radians(mouseX), radians(mouseY), radians(mouseY));
-  // noiseBackgroundDrawer(300);
+  drawDoll(shadowSize, mouseX, mouseY, 0.3 * sin(radians(mouseX)), 0.5 * sin(radians(mouseY)),  -0.5 * sin(radians(mouseY)));
+  noiseBackgroundDrawer(400);
   // drawDoll(mouseX-300, mouseY, radians(mouseX), radians(mouseY), radians(mouseY));
   // image(right, mouseX, mouseY, shadowSize, shadowSize*shadowRatio);
 }
@@ -102,19 +102,22 @@ void noiseBackgroundDrawer(int level)
     for (int j = 0; j <= width/5; j++)
     {
       xn+=.01;
-      fill(noise(xn, yn, zn)*2, 0, noise(xn, yn, zn)*level);
-      rect(i*5, j*5, 6, 6);
+      noStroke();
+      fill(noise(xn, yn, zn)*2, 0, noise(xn, yn, zn)*level, 100);
+      rect(i*5, j*5, 5, 5);
     }
   }
+  /*
   for (int i = 0; i <= height; i++) {
     stroke(0, 255-i*255/height);
     line(0, i, width, i);
     noStroke();
   }
+  */
 }
 
 
-void drawDoll(int x, int y, float rotBody, float rotLeft, float rotRight) 
+void drawDoll(float shadowSize, int x, int y, float rotBody, float rotLeft, float rotRight) 
 {
   pushMatrix();
   //translate(-shadowSize/2, -shadowSize*shadowRatio/2);
@@ -128,7 +131,7 @@ void drawDoll(int x, int y, float rotBody, float rotLeft, float rotRight)
   translate(x, y);
   rotateZ(rotBody);
   translate(shadowSize*0.3, shadowSize*shadowRatio*0.065); 
-  rotateZ(radians(mouseY));
+  rotateZ(rotLeft);
   translate(-shadowSize*0.3, -shadowSize*shadowRatio*0.065);
   translate(-x, -y);
   image(left, x, y, shadowSize, shadowSize*shadowRatio);
@@ -138,7 +141,7 @@ void drawDoll(int x, int y, float rotBody, float rotLeft, float rotRight)
   translate(x, y);
   rotateZ(rotBody);
   translate(-shadowSize*0.47, -shadowSize*shadowRatio*0.032); 
-  rotateZ(-radians(mouseY));
+  rotateZ(rotRight);
   translate(shadowSize*0.47, shadowSize*shadowRatio*0.032);
   translate(-x, -y);
   image(right, x, y, shadowSize, shadowSize*shadowRatio);
@@ -154,5 +157,5 @@ void stop()
 
 
 void mousePressed(){
-  println("x:", mouseX, ", y:", mouseY);
+  
 }
