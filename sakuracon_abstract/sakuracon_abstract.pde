@@ -19,7 +19,7 @@ void setup() {
   imageMode(CENTER);
   initSize = 600;
   colorMode(HSB, 256);
-  frameRate(240);
+  frameRate(30);
   minim = new Minim(this);
   in = minim.getLineIn(Minim.STEREO, 2048, 192000.0);
   fft = new FFT(in.bufferSize(), in.sampleRate());
@@ -37,10 +37,9 @@ void draw()
   if(counter<width) scale += 0.1/float(width);
   if(counter>width && counter<width+height) sparse += 0.5/float(height);
   
-  image(seaWave, width/2, height/2, width, height);
-  loadPixels();
-  
-  noiseBackgroundDrawer(mouseX);
+  image(seaWave, width/2 + 30*sin(radians(frameCount)), height/2 + 30*cos(radians(frameCount)), width+60, height+60);
+  blendMode(MULTIPLY);
+  noiseBackgroundDrawer(300);
   // drawFractal(width/2, height/2, initSize);
 }
 
@@ -83,17 +82,17 @@ void noiseBackgroundDrawer(int level)
   xn=noise(ns);
   yn=noise(ns);
   xs=xn;
-  for (int i = 0; i <= width/5; i++)
+  for (int i = 0; i <= width/3; i++)
   {
     xn = xs;
-    yn+=.002;
-    zn+=.002/20;
-    for (int j = 0; j <= width/5; j++)
+    yn+=getAudioTrigger(40,50)/1000;
+    zn+=getAudioTrigger(2,30)/5000;
+    for (int j = 0; j <= width/3; j++)
     {
-      xn+=.001;
+      xn+=getAudioTrigger(2,30)/2000;
       noStroke();
       fill(170+noise(xn, yn, zn)*10, 80, noise(xn, yn, zn)*level, 100);
-      rect(i*5, j*5, 5, 5);
+      rect(i*3, j*3, 3, 3);
     } 
   }
   
