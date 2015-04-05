@@ -41,18 +41,26 @@ void setup() {
 void draw() {
   //background(255);
   image(fogBackground, width/2, height/2, width, height);
+  
   fft.forward(in.mix);
   // noiseBackgroundDrawer(1000);
   // drawFractal(width/2, height/2, initSize);
   // drawCircle(width/2, height/2, 400);
-  counter++;
-  if(counter<width) scale += 0.1/float(width);
-  if(counter>width && counter<width+height) sparse += 0.5/float(height);
+  //counter++;
+  //if(counter<width) scale += 0.1/float(width);
+  //if(counter>width && counter<width+height) sparse += 0.5/float(height);
   // image(doller, mouseX, mouseY);
-  drawDoll(shadowSize, mouseX, mouseY, 0.3 * sin(radians(mouseX)), 0.5 * sin(radians(mouseY)),  -0.5 * sin(radians(mouseY)));
-  noiseBackgroundDrawer(400);
+  //drawDoll(shadowSize, mouseX, mouseY, 0.3 * sin(radians(mouseX)), 0.5 * sin(radians(mouseY)),  -0.5 * sin(radians(mouseY)));
+  
+  noiseBackgroundDrawer(200);
   // drawDoll(mouseX-300, mouseY, radians(mouseX), radians(mouseY), radians(mouseY));
   // image(right, mouseX, mouseY, shadowSize, shadowSize*shadowRatio);
+
+  stroke(180, 100, 255, 180);  
+  for(int i = 0; i < in.bufferSize() - 1; i++)
+  { 
+    line(i-width, height/2 + in.left.get(i)*100*getAudioTrigger(2,30), i+1-width, height/2 + in.left.get(i+1)*100*getAudioTrigger(2,30));
+  }
 }
 
 
